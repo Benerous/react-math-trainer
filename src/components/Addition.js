@@ -51,7 +51,7 @@ export default class Addition extends Component {
                     <div className="col-12">
                         <div class="list-group">
                             {answers.map((item) => 
-                            <li class="list-group-item" onClick={handleSubmit} value={item}>{item}</li>)}
+                            <li class="list-group-item list-group-item-action" onClick={handleSubmit} value={item}>{item}</li>)}
                         </div>
                     </div>
                 </div> 
