@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class App extends Component {
   startTimer = this.startTimer.bind(this);
   stopTimer = this.stopTimer.bind(this);
+  startMath = this.startMath.bind(this);
   state = {
     step: "main",
     time: 0,
@@ -17,7 +18,7 @@ class App extends Component {
     isOn: false,
     start: 0,
     expression: "",
-    correctAnswer: 0,
+    correctAnswerIndex: 0,
     answers : []
   };
 
@@ -31,72 +32,192 @@ class App extends Component {
       isOn: false,
       start: 0,
       expression: "",
-      correctAnswer: 0,
+      correctAnswerIndex: 0,
       answers : []
     });
   };
 
   startMath() {
-    const { correct, incorrect } = this.state;
+    const { correct, incorrect, isOn, step } = this.state;
     var firstVar = 0;
     var secondVar = 0;
     var min = 0;
     var max = 0;
-    if (correct + incorrect <= 10) {
-      firstVar = Math.floor(Math.random() * (10 - 1) + 1);
-      secondVar = Math.floor(Math.random() * (10 - 1) + 1);
-      min = firstVar + secondVar - 3;
-      max = firstVar + secondVar + 3
-    } else if (correct + incorrect >= 10 && correct + incorrect <= 25) {
-      firstVar = Math.floor(Math.random() * (100 - 1) + 1);
-      secondVar = Math.floor(Math.random() * (100 - 1) + 1);
-      min = firstVar + secondVar - 15;
-      max = firstVar + secondVar + 15;
-    } else {
-      firstVar = Math.floor(Math.random() * (1000 - 1) + 1);
-      secondVar = Math.floor(Math.random() * (1000 - 1) + 1);
-      min = firstVar + secondVar - 50;
-      max = firstVar + secondVar + 50;
-    };
-    const temp = [];
-    while(temp.length < 4){
-      var r = Math.floor(Math.random() * (max - min + 1)) + min;
-      if(temp.indexOf(r) === -1) temp.push(r);
-    };
-    if (temp.indexOf(firstVar + secondVar) === -1) {
-      temp[Math.floor(Math.random() * (4 - 1) + 1)] = firstVar + secondVar;
-    };
+    var temp = [];
+    var r = 0;
 
-    this.setState({
-      isOn: true,
-      expression: "" + firstVar + " + " + secondVar + " = ?",
-      correctAnswer: firstVar + secondVar,
-      answers: temp
-    });
+    switch (step) {
+      case "addition":
+        if (correct + incorrect <= 10 || isOn === false) {
+          firstVar = Math.floor(Math.random() * (10 - 1) + 1);
+          secondVar = Math.floor(Math.random() * (10 - 1) + 1);
+          min = firstVar + secondVar - 3;
+          max = firstVar + secondVar + 3
+        } else if (correct + incorrect >= 10 && correct + incorrect <= 25) {
+          firstVar = Math.floor(Math.random() * (100 - 10) + 1);
+          secondVar = Math.floor(Math.random() * (100 - 10) + 1);
+          min = firstVar + secondVar - 15;
+          max = firstVar + secondVar + 15;
+        } else {
+          firstVar = Math.floor(Math.random() * (1000 - 100) + 10);
+          secondVar = Math.floor(Math.random() * (1000 - 100) + 10);
+          min = firstVar + secondVar - 50;
+          max = firstVar + secondVar + 50;
+        };
+        while(temp.length < 4){
+          r = Math.floor(Math.random() * (max - min + 1)) + min;
+          if(temp.indexOf(r) === -1) temp.push(r);
+        };
+        if (temp.indexOf(firstVar + secondVar) === -1) {
+          temp[Math.floor(Math.random() * (4 - 1) + 1)] = firstVar + secondVar;
+        };
+        this.setState({
+          isOn: true,
+          expression: "" + firstVar + " + " + secondVar + " = ?",
+          correctAnswerIndex: temp.indexOf(firstVar + secondVar),
+          answers: temp
+        });
+          break;
+      
+      case "substraction":
+        if (correct + incorrect <= 10 || isOn === false) {
+          firstVar = Math.floor(Math.random() * (10 - 1) + 1);
+          secondVar = Math.floor(Math.random() * (10 - 1) + 1);
+          min = firstVar - secondVar - 3;
+          max = firstVar - secondVar + 3
+        } else if (correct + incorrect >= 10 && correct + incorrect <= 25) {
+          firstVar = Math.floor(Math.random() * (100 - 10) + 1);
+          secondVar = Math.floor(Math.random() * (100 - 10) + 1);
+          min = firstVar - secondVar - 15;
+          max = firstVar - secondVar + 15;
+        } else {
+          firstVar = Math.floor(Math.random() * (1000 - 100) + 10);
+          secondVar = Math.floor(Math.random() * (1000 - 100) + 10);
+          min = firstVar - secondVar - 50;
+          max = firstVar - secondVar + 50;
+        };
+        while(temp.length < 4){
+          r = Math.floor(Math.random() * (max - min + 1)) + min;
+          if(temp.indexOf(r) === -1) temp.push(r);
+        };
+        if (temp.indexOf(firstVar - secondVar) === -1) {
+          temp[Math.floor(Math.random() * (4 - 1) + 1)] = firstVar - secondVar;
+        };
+        this.setState({
+          isOn: true,
+          expression: "" + firstVar + " - " + secondVar + " = ?",
+          correctAnswerIndex: temp.indexOf(firstVar - secondVar),
+          answers: temp
+        });
+          break;
+
+      case "multiply":
+          if (correct + incorrect <= 15 || isOn === false) {
+            firstVar = Math.floor(Math.random() * (10 - 1) + 1);
+            secondVar = Math.floor(Math.random() * (10 - 1) + 1);
+            min = firstVar * secondVar - 3;
+            max = firstVar * secondVar + 3
+          } else if (correct + incorrect >= 16 && correct + incorrect <= 25) {
+            firstVar = Math.floor(Math.random() * (10 - 1) + 1);
+            secondVar = Math.floor(Math.random() * (100 - 10) + 10);
+            min = firstVar * secondVar - 3;
+            max = firstVar * secondVar + 15;
+          } else if (correct + incorrect >= 26 && correct + incorrect <= 32) {
+            firstVar = Math.floor(Math.random() * (100 - 10) + 10);
+            secondVar = Math.floor(Math.random() * (10 - 1) + 1);
+            min = firstVar * secondVar - 15;
+            max = firstVar * secondVar + 3;
+          } else {
+            firstVar = Math.floor(Math.random() * (100 - 10) + 10);
+            secondVar = Math.floor(Math.random() * (100 - 10) + 10);
+            min = firstVar * secondVar - 15;
+            max = firstVar * secondVar + 15;
+          };
+          while(temp.length < 4){
+            r = Math.floor(Math.random() * (max - min + 1)) + min;
+            if(temp.indexOf(r) === -1) temp.push(r);
+          };
+          if (temp.indexOf(firstVar * secondVar) === -1) {
+            temp[Math.floor(Math.random() * (4 - 1) + 1)] = firstVar * secondVar;
+          };
+          this.setState({
+            isOn: true,
+            expression: "" + firstVar + " * " + secondVar + " = ?",
+            correctAnswerIndex: temp.indexOf(firstVar * secondVar),
+            answers: temp
+          });
+          break;
+
+      case "division":
+          if (correct + incorrect <= 15 || isOn === false) {
+              firstVar = Math.floor(Math.random() * (10 - 1) + 1);
+              secondVar = Math.floor(Math.random() * (10 - 1) + 1);
+              min = Math.round((firstVar / secondVar - 3) * 1000) / 1000;
+              max = Math.round((firstVar / secondVar + 3) * 1000) / 1000
+            } else if (correct + incorrect >= 16 && correct + incorrect <= 25) {
+              firstVar = Math.floor(Math.random() * (10 - 1) + 1);
+              secondVar = Math.floor(Math.random() * (100 - 10) + 10);
+              min = Math.round((firstVar / secondVar - 3) * 1000) / 1000;
+              max = Math.round((firstVar / secondVar + 15) * 1000) / 1000
+            } else if (correct + incorrect >= 26 && correct + incorrect <= 32) {
+              firstVar = Math.floor(Math.random() * (100 - 10) + 10);
+              secondVar = Math.floor(Math.random() * (10 - 1) + 1);
+              min = Math.round((firstVar / secondVar - 15) * 1000) / 1000;
+              max = Math.round((firstVar / secondVar + 3) * 1000) / 1000
+            } else {
+              firstVar = Math.floor(Math.random() * (100 - 10) + 10);
+              secondVar = Math.floor(Math.random() * (100 - 10) + 10);
+              min = Math.round((firstVar / secondVar - 15) * 1000) / 1000;
+              max = Math.round((firstVar / secondVar + 15) * 1000) / 1000
+            };
+            while(temp.length < 4){
+              r = Math.round((Math.floor(Math.random() * (max - min + 1)) + min) * 1000) / 1000;
+              if (r < 0) {
+                r = r * (-1);
+              }
+              if(temp.indexOf(r) === -1) temp.push(r);
+            };
+            if (temp.indexOf(Math.round((firstVar / secondVar) * 1000) / 1000) === -1) {
+              temp[Math.floor(Math.random() * (4 - 1) + 1)] = Math.round((firstVar / secondVar) * 1000) / 1000;
+            };
+            this.setState({
+              isOn: true,
+              expression: "" + firstVar + " / " + secondVar + " = ?",
+              correctAnswerIndex: temp.indexOf(Math.round((firstVar / secondVar) * 1000) / 1000),
+              answers: temp
+            });
+          break;
+
+        default:
+          break;
+    };
   };
 
   startTimer() {
-    this.startMath();
     this.setState({
       time: 0,
       start: Date.now() - this.state.time,
       correct: 0,
-      incorrect: 0
+      incorrect: 0,
+      isOn: true
     });
     this.timer = setInterval(() => this.setState({
       time: Math.floor((Date.now() - this.state.start)/1000)
     }), 1000);
+    this.startMath();
   };
 
   stopTimer() {
-    this.setState({isOn: false})
+    this.setState({
+      isOn: false
+    })
     clearInterval(this.timer)
   };
 
   handleSubmit = (e) => {
-    const { correct, incorrect } = this.state;
+    const { correct, incorrect, correctAnswerIndex } = this.state;
     e.preventDefault();
-    if (this.state.correctAnswer === e.target.value) {
+    if (correctAnswerIndex === e.target.value) {
       this.setState({
         correct: correct + 1
       });
@@ -117,36 +238,36 @@ class App extends Component {
                 <button 
                   onClick={this.selectStep} 
                   value="main" 
-                  className="btn btn-lg btn-primary my-5 w-50">
+                  className="btn btn-lg btn-outline-primary py-md-3 py-2 my-5 w-75">
                   Math trainer
                 </button>
                 <br />
                 <button 
-                  className="btn btn-outline-success mx-auto my-2 w-50" 
+                  className="btn btn-success mx-auto my-2 py-md-3 py-2 w-50" 
                   onClick={this.selectStep} 
                   value="addition">
-                  Addition
+                  + Addition +
                 </button>
                 <br />
                 <button 
-                  className="btn btn-outline-info mx-auto my-2 w-50" 
+                  className="btn btn-info mx-auto my-2 py-md-3 py-2 w-50" 
                   onClick={this.selectStep} 
                   value="substraction">
-                  Substraction
+                  - Substraction -
                 </button>
                 <br />
                 <button 
-                  className="btn btn-outline-warning mx-auto my-2 w-50" 
+                  className="btn btn-warning mx-auto my-2 py-md-3 py-2 text-white w-50" 
                   onClick={this.selectStep} 
                   value="multiply">
-                  Multiply
+                  * Multiplication *
                 </button>
                 <br />
                 <button 
-                  className="btn btn-outline-danger mx-auto my-2 w-50" 
+                  className="btn btn-danger mx-auto my-2 py-md-3 py-2 w-50" 
                   onClick={this.selectStep} 
                   value="division">
-                  Division
+                  / Division /
                 </button>
                 <br />
               </div>
@@ -158,7 +279,7 @@ class App extends Component {
               isOn={this.state.isOn}
               time={this.state.time}
               expression={this.state.expression}
-              correctAnswer={this.state.correctAnswer}
+              correctAnswerIndex={this.state.correctAnswerIndex}
               answers={this.state.answers}
               correct={this.state.correct}
               incorrect={this.state.incorrect}
@@ -171,19 +292,49 @@ class App extends Component {
       case "substraction":
           return (
             <Substruction 
+              isOn={this.state.isOn}
+              time={this.state.time}
+              expression={this.state.expression}
+              correctAnswerIndex={this.state.correctAnswerIndex}
+              answers={this.state.answers}
+              correct={this.state.correct}
+              incorrect={this.state.incorrect}
               selectStep={this.selectStep}
+              startTimer={this.startTimer}
+              stopTimer={this.stopTimer}
+              handleSubmit={this.handleSubmit}
             />
           )
       case "multiply":
           return (
             <Multiply 
+              isOn={this.state.isOn}
+              time={this.state.time}
+              expression={this.state.expression}
+              correctAnswerIndex={this.state.correctAnswerIndex}
+              answers={this.state.answers}
+              correct={this.state.correct}
+              incorrect={this.state.incorrect}
               selectStep={this.selectStep}
+              startTimer={this.startTimer}
+              stopTimer={this.stopTimer}
+              handleSubmit={this.handleSubmit}
             />
           )
       case "division":
           return (
-            <Division 
+            <Division
+              isOn={this.state.isOn}
+              time={this.state.time}
+              expression={this.state.expression}
+              correctAnswerIndex={this.state.correctAnswerIndex}
+              answers={this.state.answers}
+              correct={this.state.correct}
+              incorrect={this.state.incorrect}
               selectStep={this.selectStep}
+              startTimer={this.startTimer}
+              stopTimer={this.stopTimer}
+              handleSubmit={this.handleSubmit}
             />
           )
       default:

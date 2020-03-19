@@ -18,21 +18,21 @@ export default class Addition extends Component {
                 <button 
                     onClick={selectStep} 
                     value="main" 
-                    className="btn btn-lg btn-outline-primary my-5 w-50">
+                    className="btn btn-lg btn-outline-primary my-5 py-md-3 py-2 w-50">
                     Math trainer
                 </button>
                 <br />
                 {isOn ? <button 
                             onClick={stopTimer} 
                             value="stop" 
-                            className="btn btn-outline-danger mb-5 w-25">
+                            className="btn btn-danger mb-5 py-md-3 py-2 w-25">
                             Stop
                         </button>
                         :
                         <button 
                             onClick={startTimer} 
                             value="start" 
-                            className="btn btn-outline-success mb-5 w-25">
+                            className="btn btn-success mb-5 py-md-3 py-2 w-25">
                             Start
                         </button>
                 }
@@ -49,9 +49,9 @@ export default class Addition extends Component {
                     </h5>
                     <h3 className="col-12 text-center text-dark my-5">{expression}</h3>
                     <div className="col-12">
-                        <div class="list-group">
-                            {answers.map((item) => 
-                            <li class="list-group-item list-group-item-action" onClick={handleSubmit} value={item}>{item}</li>)}
+                        <div className="list-group">
+                            {answers.map((item, index) => 
+                            <li className="list-group-item list-group-item-action" onClick={handleSubmit} value={index}>{item}</li>)}
                         </div>
                     </div>
                 </div> 
