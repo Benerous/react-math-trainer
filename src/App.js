@@ -4,12 +4,14 @@ import Addition from './components/Addition';
 import Substruction from './components/Substraction';
 import Multiply from './components/Multiply';
 import Division from './components/Division';
+import Results from './components/Results'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   startTimer = this.startTimer.bind(this);
   stopTimer = this.stopTimer.bind(this);
   startMath = this.startMath.bind(this);
+  // submitResult = this.submitResult.bind(this);
   state = {
     step: "main",
     time: 0,
@@ -19,7 +21,8 @@ class App extends Component {
     start: 0,
     expression: "",
     correctAnswerIndex: 0,
-    answers : []
+    answers : [],
+    results: []
   };
 
   selectStep = (e) => {
@@ -208,10 +211,23 @@ class App extends Component {
   };
 
   stopTimer() {
+    if (this.state.isOn) {
+      this.submitResult();
+    };
     this.setState({
       isOn: false
-    })
-    clearInterval(this.timer)
+    });
+    clearInterval(this.timer);
+  };
+
+  submitResult = () => {
+    const { time, correct, incorrect, step, results } = this.state;
+    results.push({
+      resultTime: time,
+      resultCorrect: correct,
+      resultIncorrect: incorrect,
+      resultType: step
+    });
   };
 
   handleSubmit = (e) => {
@@ -227,6 +243,13 @@ class App extends Component {
       });
     };
     this.startMath();
+  };
+
+  clearResults = (e) => {
+    e.preventDefault();
+    this.setState({
+      results: []
+    });
   };
 
   render() {
@@ -268,6 +291,13 @@ class App extends Component {
                   onClick={this.selectStep} 
                   value="division">
                   / Division /
+                </button>
+                <br />
+                <button 
+                  className="btn btn-dark mx-auto my-2 py-md-3 py-2 w-25" 
+                  onClick={this.selectStep} 
+                  value="results">
+                  Results 
                 </button>
                 <br />
               </div>
@@ -337,8 +367,16 @@ class App extends Component {
               handleSubmit={this.handleSubmit}
             />
           )
+      case "results":
+        return (
+          <Results 
+            selectStep={this.selectStep}
+            results={this.state.results}
+            clearResults={this.clearResults}
+          />
+        );
       default:
-          return <h1>Success</h1>;
+        return <h1>Success</h1>;
     };
   };
 };

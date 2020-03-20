@@ -49,7 +49,7 @@ export default class Multiply extends Component {
                     </h5>
                     <h3 className="col-12 text-center text-dark my-5">{expression}</h3>
                     <div className="col-12">
-                        <div className="list-group">
+                        <div className="list-group mb-5">
                             {answers.map((item, index) => 
                             <li className="list-group-item list-group-item-action" onClick={handleSubmit} value={index}>{item}</li>)}
                         </div>
